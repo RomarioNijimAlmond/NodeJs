@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs1 = require('fs');
 
 let yo = fs.readFileSync('./hello.txt', 'utf-8')
 console.log(yo);
