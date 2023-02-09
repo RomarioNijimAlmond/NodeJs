@@ -24,11 +24,13 @@ const server = http.createServer(async (req, res) => {
         try {
             const data = await readFileAsync('./data.json');
             const productData = JSON.parse(data);
+            res.writeHead(200, { 'content-type': "application/json" })
             console.log(productData);
+            res.end(data)
         } catch (err) {
             console.log(err);
         }
-        res.end('API')
+
     } else {
         res.writeHead(404, {
             'content-type': 'text/html',
