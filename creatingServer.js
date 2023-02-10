@@ -16,20 +16,29 @@ async function readFileAsync(file) {
 }
 const server = http.createServer(async (req, res) => {
     const pathName = req.url;
+    //overview page
     if (pathName === '/' || pathName === '/overview') {
+        const overviewData = await readFileAsync('/template-overview.html')
+        log(overviewData);
         res.end('THIS IS OVERVIEW')
+        //products page
     } else if (pathName === '/product') {
+        const productData = await readFileAsync('./template-product.html')
+        console.log(productData);
         res.end('THIS IS PRODUCT')
+        //API
     } else if (pathName === '/api') {
         try {
             const data = await readFileAsync('./data.json');
-            const productData = JSON.parse(data);
+            const jsonFileData = JSON.parse(data);
             res.writeHead(200, { 'content-type': "application/json" })
-            console.log(productData);
+            console.log(jsonFileData);
             res.end(data)
         } catch (err) {
             console.log(err);
         }
+
+        //not found
 
     } else {
         res.writeHead(404, {
