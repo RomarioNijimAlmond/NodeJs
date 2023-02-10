@@ -1,8 +1,6 @@
 const http1 = require('http');
-const url = require('url');
+const urlModule = require('url');
 const fs = require('fs');
-const { rejects } = require('assert');
-const { isJSDocPublicTag } = require('typescript');
 
 //function to replace template which takes a template and a product, we pass in our place hodler and replace with our product name
 const replaceTemplate = (template, product) => {
@@ -33,18 +31,24 @@ const data = fs.readFileSync('./data.json', 'utf-8');
 const dataObj = JSON.parse(data);
 
 const server = http1.createServer((req, res) => {
-    const url = req.url;
+    const pathname = urlModule.parse(req.url).pathname
+    const { query } = urlModule.parse(req.url, true);
 
-    if (url === '/' || url === '/overview') {
+    if (pathname === '/' || pathname === '/overview') {
         res.writeHead(200, { 'content-type': 'text/html' })
         const cardsHtml = dataObj.map(el => replaceTemplate(templateCard, el)).join('')
         const output = templateOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);
         res.end(output);
-    } else if (url === '/product') {
-        res.end(templateProduct);
-    } else if (url === '/api') {
+
+    } else if (pathname === '/product') {
+        const product = dataObj[query.id];
+        const output = replaceTemplate(templateProduct, product);
+        res.end(output);
+
+    } else if (pathname === '/api') {
         res.writeHead(202, { 'content-type': 'application/json' });
         res.end(data);
+
     } else {
         res.writeHead(404, {
             "content-type": 'text/html',
