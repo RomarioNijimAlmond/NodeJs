@@ -27,19 +27,20 @@ const server = http1.createServer((req, res) => {
 
   if (pathname === "/" || pathname === "/overview") {
     res.writeHead(200, { "content-type": "text/html" });
-    const cardsHtml = dataObj
-      .map((el) => replaceTemplate(templateCard, el))
-      .join("");
+    const cardsHtml = dataObj.map((el) => replaceTemplate(templateCard, el)).join("");
     const output = templateOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
     res.end(output);
     console.log(cardsHtml);
+
   } else if (pathname === "/product") {
     const product = dataObj[query.id];
     const output = replaceTemplate(templateProduct, product);
     res.end(output);
+
   } else if (pathname === "/api") {
     res.writeHead(200, { "content-type": "application/json" });
     res.end(data);
+
   } else {
     res.writeHead(404, {
       "content-type": "text/html",
