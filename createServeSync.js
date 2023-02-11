@@ -1,22 +1,8 @@
 const http1 = require('http');
 const urlModule = require('url');
 const fs = require('fs');
-
+import { replaceTemplate } from './modules/replaceTemplate';
 //function to replace template which takes a template and a product, we pass in our place hodler and replace with our product name
-const replaceTemplate = (template, product) => {
-    let output = template.replace(/{%PRODUCTNAME%}/g, product.productName);
-    output = output.replace(/{%IMAGE%}/g, product.image);
-    output = output.replace(/{%PRICE%}/g, product.price);
-    output = output.replace(/{%FROM%}/g, product.from);
-    output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
-    output = output.replace(/{%DESCRIPTION%}/g, product.description);
-    output = output.replace(/{%ID%}/g, product.id);
-    output = output.replace(/{%QUANTITY%}/g, product.quantity);
-    if (!product.organic) {
-        output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
-        return output;
-    }
-}
 
 //sync because we are executing these only once when we load these applications and they load in order
 //loop through the array of the json object and for each of them repalce the placeholders in the templates with the actul data from the current product
@@ -39,6 +25,7 @@ const server = http1.createServer((req, res) => {
         const cardsHtml = dataObj.map(el => replaceTemplate(templateCard, el)).join('')
         const output = templateOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);
         res.end(output);
+        console.log(cardsHtml);
 
     } else if (pathname === '/product') {
         const product = dataObj[query.id];
@@ -46,7 +33,7 @@ const server = http1.createServer((req, res) => {
         res.end(output);
 
     } else if (pathname === '/api') {
-        res.writeHead(202, { 'content-type': 'application/json' });
+        res.writeHead(200, { 'content-type': 'application/json' });
         res.end(data);
 
     } else {

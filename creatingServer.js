@@ -5,7 +5,6 @@ const { resolve } = require('path');
 /////Server//////
 //create and start a server to listen to incoming requests 
 
-
 async function readFileAsync(file) {
     return new Promise((resolve, reject) => {
         fs.readFile(file, 'utf-8', (err, data) => {
@@ -37,9 +36,7 @@ const server = http.createServer(async (req, res) => {
         } catch (err) {
             console.log(err);
         }
-
-        //not found
-
+        
     } else {
         res.writeHead(404, {
             'content-type': 'text/html',
