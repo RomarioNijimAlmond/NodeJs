@@ -1,7 +1,7 @@
 const http1 = require('http');
 const urlModule = require('url');
 const fs = require('fs');
-import { replaceTemplate } from './modules/replaceTemplate';
+const replaceTemplate = require('./modules/replaceTemplate');
 //function to replace template which takes a template and a product, we pass in our place hodler and replace with our product name
 
 //sync because we are executing these only once when we load these applications and they load in order
