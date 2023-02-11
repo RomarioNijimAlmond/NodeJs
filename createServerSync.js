@@ -1,6 +1,7 @@
 const http1 = require('http');
 const urlModule = require('url');
 const fs = require('fs');
+const slugify = require('slugify');
 const replaceTemplate = require('./modules/replaceTemplate');
 //function to replace template which takes a template and a product, we pass in our place hodler and replace with our product name
 
@@ -15,6 +16,10 @@ const templateCard = fs.readFileSync('./template-card.html', 'utf-8')
 
 const data = fs.readFileSync('./data.json', 'utf-8');
 const dataObj = JSON.parse(data);
+const slugs = dataObj.map(el => slugify(el.productName, { lower: true }));
+console.log(slugs);
+
+console.log(slugify('Fresh product', { lower: true }));
 
 const server = http1.createServer((req, res) => {
     const pathname = urlModule.parse(req.url).pathname
